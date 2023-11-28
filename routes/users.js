@@ -1,7 +1,7 @@
 const express = require("express")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
-const {auth} = require("../middlewares/auth.js")
+const {auth,authAdmin} = require("../middlewares/auth.js")
 
 const { UserModel, validateUser, loginValid, createToken } = require("../models/userModel")
 const router = express.Router();
@@ -18,6 +18,16 @@ router.get("/", async (req, res) => {
             .skip((page - 1) * perPage)
             .sort({ [sort]: reverse })
 
+        res.json(data)
+    }
+    catch (err) {
+        res.status(500).json({ msg: "err", err })
+    }
+})
+router.get("/list",authAdmin, async (req, res) => {
+   
+    try {
+        let data = await UserModel.find({})
         res.json(data)
     }
     catch (err) {
@@ -71,7 +81,7 @@ router.post("/login", async (req, res) => {
         if (!valisPass) {
             return res.status(403).json({ msg: "wrong password" })
         }
-        let newToken = createToken(user._id);
+        let newToken = createToken(user._id,user.role);
         res.json({ token: newToken });
     }
     catch (err) {
