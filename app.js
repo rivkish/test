@@ -4,7 +4,7 @@ const http=require("http")
 const cors=require("cors")
 const {routesInit}=require("./routes/config_routes")
 require("./db/mongoConnect")
-
+// 123
 const app=express()
 app.use(cors())
 app.use(express.json())

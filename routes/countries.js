@@ -1,10 +1,10 @@
 
 const express= require("express");
-const {CakeModel,validateCake} = require("../models/cakeModel.js")
+const {CountryModel,validateCountry} = require("../models/countryModel")
 const router = express.Router();
 const {auth} = require("../middlewares/auth.js")
 
-// add
+
 
 router.get("/" , async(req,res)=> {
   let perPage = Math.min(req.query.perPage,20) || 5;
@@ -13,7 +13,7 @@ router.get("/" , async(req,res)=> {
   let reverse = req.query.reverse == "yes" ? -1 : 1;
 
   try{
-    let data = await CakeModel
+    let data = await CountryModel
     .find({})
     .limit(perPage)
     .skip((page - 1)*perPage)
@@ -27,15 +27,16 @@ router.get("/" , async(req,res)=> {
 })
                                  
 router.post("/",auth, async(req,res) => {
-  let valdiateBody =  validateCake(req.body);
+  let valdiateBody = validateCountry(req.body);
   if(valdiateBody.error){
     return res.status(400).json(valdiateBody.error.details)
   }            
   try{
-    let cake = new CakeModel(req.body);
-    cake.user_id=req.tokenData._id;
-    await cake.save();
-    res.status(201).json(cake)
+    let country = new CountryModel(req.body);
+
+    country.user_id=req.tokenData._id;
+    await country.save();
+    res.status(201).json(country)
   }
   catch(err){
     console.log(err)
@@ -44,13 +45,13 @@ router.post("/",auth, async(req,res) => {
 })
 
 router.put("/:idEdit", async(req,res) => {
-  let valdiateBody = validateCake(req.body);
+  let valdiateBody = validateCountry(req.body);
   if(valdiateBody.error){
     return res.status(400).json(valdiateBody.error.details)
   }
   try{
     let idEdit = req.params.idEdit
-    let data = await CakeModel.updateOne({_id:idEdit},req.body)
+    let data = await CountryModel.updateOne({_id:idEdit},req.body)
 
     res.json(data);
   }
@@ -63,7 +64,7 @@ router.put("/:idEdit", async(req,res) => {
 router.delete("/:idDel",auth, async(req,res) => {
   try{
     let idDel = req.params.idDel
-    let data = await CakeModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
+    let data = await CountryModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
     res.json(data);
   }
   catch(err){
