@@ -20,7 +20,7 @@ exports.validateUser=(_reqbody)=>{
     let joiSchema=Joi.object({
         name: Joi.string().min(2).max(50).required(),
         email: Joi.string().min(2).max(100).email().required(),
-        password: Joi.string().min(2).max(50).required(),
+        password: Joi.string().min(4).max(50).required(),
         date_created: Joi.date().allow()
     })
 
@@ -35,7 +35,7 @@ exports.createToken=(_id,role)=>{
 exports.loginValid=(_reqbody)=>{
     let joiSchema=Joi.object({
         email: Joi.string().min(2).max(100).email().required(),
-        password: Joi.string().min(6).max(50).required(),
+        password: Joi.string().min(4).max(50).required(),
     })
 
     return joiSchema.validate(_reqbody)

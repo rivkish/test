@@ -4,10 +4,8 @@ const {CakeModel,validateCake} = require("../models/cakeModel.js")
 const router = express.Router();
 const {auth} = require("../middlewares/auth.js")
 
-// add
-
 router.get("/" , async(req,res)=> {
-  let perPage = Math.min(req.query.perPage,20) || 5;
+  let perPage = Math.min(req.query.perPage,20) || 10;
   let page = req.query.page || 1;
   let sort = req.query.sort || "_id";
   let reverse = req.query.reverse == "yes" ? -1 : 1;
@@ -24,6 +22,20 @@ router.get("/" , async(req,res)=> {
     console.log(err)
     res.status(500).json({msg:"err",err})
   }                      
+})
+router.get("/search",async(req,res) => {
+  try{
+    let queryS = req.query.s;
+
+    let searchReg = new RegExp(queryS,"i")
+    let data = await CakesModel.find({name:searchReg})
+    .limit(50)
+    res.json(data);
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({msg:"there error try again later",err})
+  }
 })
                                  
 router.post("/",auth, async(req,res) => {
@@ -49,8 +61,14 @@ router.put("/:idEdit", async(req,res) => {
     return res.status(400).json(valdiateBody.error.details)
   }
   try{
-    let idEdit = req.params.idEdit
-    let data = await CakeModel.updateOne({_id:idEdit},req.body)
+    let editId = req.params.idEdit
+    if(req.tokenData.role == "admin"){
+      data = await CakeModel.updateOne({_id:editId},req.body)
+    }
+    else{
+       data = await CakeModel.updateOne({_id:editId,user_id:req.tokenData._id},req.body)
+    }
+  
 
     res.json(data);
   }
@@ -62,8 +80,13 @@ router.put("/:idEdit", async(req,res) => {
 
 router.delete("/:idDel",auth, async(req,res) => {
   try{
-    let idDel = req.params.idDel
-    let data = await CakeModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
+    let delId = req.params.idDel
+    if(req.tokenData.role == "admin"){
+      data = await CakeModel.deleteOne({_id:delId})
+    }
+    else{
+      data = await CakeModel.deleteOne({_id:delId,user_id:req.tokenData._id})
+    }
     res.json(data);
   }
   catch(err){

@@ -26,7 +26,10 @@ export const declareEvents = () => {
             name: document.querySelector('#input_name').value,
             cals: document.querySelector('#input_cals').value,
             price: document.querySelector('#input_price').value,
-            img: document.querySelector('#input_img').value,
+            // img: document.querySelector('#input_img').value,
+        }
+        if(document.querySelector('#input_img').value!=""){
+            cake.img=document.querySelector('#input_img').value
         }
         addToCakes(cake)
         

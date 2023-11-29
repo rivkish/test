@@ -7,12 +7,14 @@ const init = () => {
 }
 
 export const doApi = async () => {
+    // let url = "http://localhost:3000/user/"
     let url = "https://test-rivka.onrender.com/user/"
     let resp = await axios.get(url);
     createTable(resp.data)
 }
 
 export const addToUsers = async (_country) => {
+    // let Murl = "http://localhost:3000/user/"
     let Murl = "https://test-rivka.onrender.com/user/"
     try {
         let resp = await axios({
@@ -32,6 +34,7 @@ export const addToUsers = async (_country) => {
 }
 const funcDelete = async (_id) => {
 
+    // let url = `http://localhost:3000/user/${_id}`;
     let url = `https://test-rivka.onrender.com/user/${_id}`;
     try {
         let resp = await axios({
