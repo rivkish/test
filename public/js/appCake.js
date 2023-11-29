@@ -7,13 +7,13 @@ const init = () => {
 }
 
 export const doApi = async () => {
-    let url = "http://localhost:3000/cake/"
+    let url = "https://test-rivka.onrender.com/cake/"
     let resp = await axios.get(url);
     createTable(resp.data)
 }
 
 export const login=async(_userLogin)=>{
-let url="http://localhost:3000/user/login"
+let url="https://test-rivka.onrender.com/user/login"
 try {
     let resp = await axios({
         url: url,
@@ -32,7 +32,7 @@ catch (err) {
 }
 
 export const addToCakes = async (_cake) => {
-    let Murl = "http://localhost:3000/cake/"
+    let Murl = "https://test-rivka.onrender.com/cake/"
     if(!localStorage.getItem("token")){
         alert("you need to login")
         return
@@ -60,7 +60,7 @@ const funcDelete = async (_id) => {
         alert("you need to login")
         return
     }
-    let url = `http://localhost:3000/cake/${_id}`;
+    let url = `https://test-rivka.onrender.com/cake/${_id}`;
     try {
         let resp = await axios({
             url: url,
